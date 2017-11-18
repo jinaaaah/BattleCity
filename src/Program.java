@@ -75,6 +75,7 @@ public class Program extends PApplet {
     private List<Block> blocks;
     private List<Bullet> bullets;
     private List<Explosion> explosions;
+    private DataOutputStream dos;
 
     private Tank user;
 
@@ -93,6 +94,15 @@ public class Program extends PApplet {
 
     @Override
     public void keyPressed(KeyEvent event) {
+
+        try {
+            String string = "MOVE#" + user.getDir() + "#" + user.getPosX() + "#" + user.getPosY();
+            dos.writeInt(string.length());
+            dos.write(string.getBytes());
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
         //key에 따른 유저 업데이트, 가는 상태
         if(key == CODED){
             user.setMoved(true);
@@ -118,6 +128,14 @@ public class Program extends PApplet {
 
     @Override
     public void keyReleased() {
+        try {
+            String string = "STOP";
+            dos.writeInt(string.length());
+            dos.write(string.getBytes());
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
         //멈춤상태
         user.setMoved(false);
 
@@ -154,7 +172,7 @@ public class Program extends PApplet {
             socket.connect(new InetSocketAddress("192.168.11.3",5000));
 
             OutputStream os = socket.getOutputStream();
-            DataOutputStream dos = new DataOutputStream(os);
+            dos = new DataOutputStream(os);
             InputStream is = socket.getInputStream();
 
             readerThread = new ReaderThread(is);
@@ -169,6 +187,7 @@ public class Program extends PApplet {
             String string = "SET#JiDah";
             dos.writeInt(string.length());
             dos.write(string.getBytes());
+
 
         } catch (Exception e) {
             e.printStackTrace();
