@@ -76,21 +76,23 @@ public class Program extends PApplet {
     public void keyPressed(KeyEvent event) {
         //key에 따른 유저 업데이트, 가는 상태
         if(key == UP){
-
+            user.setDir(Constants.MOVE_UP);
         }else if(key == DOWN){
-
+            user.setDir(Constants.MOVE_DOWN);
         }else if(key == LEFT){
-
+            user.setDir(Constants.MOVE_LEFT);
         }else if(key == RIGHT){
-
+            user.setDir(Constants.MOVE_RIGHT);
         }else if(key == 'd'){
 
         }
+        user.setState(true);
     }
 
     @Override
     public void keyReleased() {
         //멈춤상태
+        user.setState(false);
     }
 
     @Override

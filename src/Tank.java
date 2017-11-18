@@ -11,14 +11,16 @@ public class Tank extends RenderObject {
 
     @Override
     public void update() {
-        if (this.dir == Constants.MOVE_LEFT) {
-            posX -= speed;
-        } else if (this.dir == Constants.MOVE_RIGHT) {
-            posX += speed;
-        } else if (this.dir == Constants.MOVE_UP) {
-            posY -= speed;
-        } else if (this.dir == Constants.MOVE_DOWN) {
-            posY += speed;
+        if(isMoved) {
+            if (this.dir == Constants.MOVE_LEFT) {
+                posX -= speed;
+            } else if (this.dir == Constants.MOVE_RIGHT) {
+                posX += speed;
+            } else if (this.dir == Constants.MOVE_UP) {
+                posY -= speed;
+            } else if (this.dir == Constants.MOVE_DOWN) {
+                posY += speed;
+            }
         }
     }
 

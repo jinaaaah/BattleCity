@@ -9,5 +9,6 @@ public class Constants {
     static final int MOVE_RIGHT = 7;
     static final int MOVE_UP = 8;
     static final int MOVE_DOWN = 9;
+    static final int STAY = 10;
 
 }
