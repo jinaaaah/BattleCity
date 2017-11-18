@@ -167,6 +167,9 @@ public class Program extends PApplet {
         for(Bullet b : bullets){
             b.render();
         }
+        for(Block b : blocks){
+            b.render();
+        }
     }
 
     @Override
@@ -176,16 +179,19 @@ public class Program extends PApplet {
 
     //map 정보 받아와 blocks에 넣어준다
     private void initMap(String message){
-        String[] row = message.split("/n");
-        for(int i = 0; i < row.length; i++){
-            System.out.println(row[i]);
-            String[] column = row[i].split("");
-            for(int j = 0; j < row[i].length(); j++){
-                System.out.println(column[j]);
-                //mapArray[i][j] = Integer.parseInt(column[j]);
+        String row = message;
+        Block block;
+        for(int i = 0 ; i < 20 ; i ++){
+            for( int j = 0 ; j < 20 ; j ++){
+                mapArray[i][j] = Integer.parseInt(String.valueOf(row.charAt(i * 21 + j)));
+                if(mapArray[i][j] == 1){
+                    block = new Block(this);
+                    block.setPosX(i*40);
+                    block.setPosY(j*40);
+                    blocks.add(block);
+                }
             }
         }
-
     }
 
     public static void main(String[] args) {
