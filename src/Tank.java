@@ -3,9 +3,13 @@ import processing.core.PConstants;
 
 public class Tank extends RenderObject {
     protected int team;
+    protected Bullet bullet;
+    protected boolean isDead;
+
     public Tank(PApplet pApplet) {
         super(pApplet);
-        this.setSpeed(1);
+        this.setSpeed(2);
+        isDead = false;
         this.dir = Constants.STOP;
         addMode(Constants.A_TEAM, Constants.OBJECT, 1, 8);
         addMode(Constants.B_TEAM, Constants.OBJECT, 9, 16);
@@ -28,6 +32,8 @@ public class Tank extends RenderObject {
             System.out.println(dir + ":" + posX + "," + posY);
         }
 
+        reload();
+
     }
 
     @Override
@@ -38,51 +44,19 @@ public class Tank extends RenderObject {
         pImage = pImages.get((tick/8) % pImages.size());
         pApplet.imageMode(PConstants.CENTER);
         pApplet.translate(18,20);
-        pApplet.pushMatrix();
-        if (this.dir == Constants.MOVE_LEFT) {
-            pApplet.rotate(PApplet.radians(270.0f));
-            pApplet.image(pImage, -posY, posX);
-        } else if (this.dir == Constants.MOVE_RIGHT) {
-            pApplet.rotate(PApplet.radians(90.0f));
-            pApplet.image(pImage, posY, -posX);
-        } else if (this.dir == Constants.MOVE_DOWN) {
-            pApplet.rotate(PApplet.radians(180.0f));
-            pApplet.image(pImage, -posX, -posY);
-        } else {
-            pApplet.image(pImage, posX, posY);
+        move();
+    }
+
+    public Bullet shoot() {
+        if(bullet == null) {
+            bullet = new Bullet(pApplet, posX, posY, dir);
         }
+        return bullet;
+    }
 
-        pApplet.popMatrix();
-
-
-        /*if(this.dir == Constants.STOP){
-            pImage = pImages.get(0);
-            pApplet.translate(18,20);
-            pApplet.image(pImage, posX, posY);
-
-        }else{
-            tick++;
-            pImage = pImages.get((tick/8) % pImages.size());
-            pApplet.imageMode(PConstants.CENTER);
-            pApplet.translate(18,20);
-            pApplet.pushMatrix();
-            if (this.dir == Constants.MOVE_LEFT) {
-                pApplet.rotate(PApplet.radians(270.0f));
-                pApplet.image(pImage, posY, posX);
-            } else if (this.dir == Constants.MOVE_RIGHT) {
-                pApplet.rotate(PApplet.radians(90.0f));
-                pApplet.image(pImage, posY, posX);
-            } else if (this.dir == Constants.MOVE_DOWN) {
-                pApplet.rotate(PApplet.radians(180.0f));
-                pApplet.image(pImage, posX, posY);
-            } else {
-                pApplet.image(pImage, posX, posY);
-            }
-
-            pApplet.popMatrix();
-
-        }*/
-
-
+    public void reload() {
+        if(bullet != null && bullet.checkPosition()) {
+            bullet = null;
+        }
     }
 }

@@ -103,9 +103,10 @@ public class Program extends PApplet {
                 user.setDir(Constants.MOVE_LEFT);
             }else if(keyCode == RIGHT){
                 user.setDir(Constants.MOVE_RIGHT);
-            }else if(key == 'd'){
-
             }
+        }
+        if(key == ' '){
+            bullets.add(user.shoot());
         }
 
     }
@@ -161,12 +162,19 @@ public class Program extends PApplet {
         user.update();
         user.render();
 
-        for(Bullet b : bullets){
+        for(int i = 0 ; i < bullets.size() ; i++) {
+            Bullet b = bullets.get(i);
             b.update();
+            b.render();
+
+            if(b.checkPosition()) {
+                bullets.remove(b);
+            }
         }
         for(Bullet b : bullets){
-            b.render();
+
         }
+
         for(Block b : blocks){
             b.render();
         }

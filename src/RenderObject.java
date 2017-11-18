@@ -82,4 +82,22 @@ public abstract class RenderObject {
         imageMap.put(mode, img);
     }
 
+    public void move() {
+        pApplet.pushMatrix();
+        if (this.dir == Constants.MOVE_LEFT) {
+            pApplet.rotate(PApplet.radians(270.0f));
+            pApplet.image(pImage, -posY, posX);
+        } else if (this.dir == Constants.MOVE_RIGHT) {
+            pApplet.rotate(PApplet.radians(90.0f));
+            pApplet.image(pImage, posY, -posX);
+        } else if (this.dir == Constants.MOVE_DOWN) {
+            pApplet.rotate(PApplet.radians(180.0f));
+            pApplet.image(pImage, -posX, -posY);
+        } else {
+            pApplet.image(pImage, posX, posY);
+        }
+
+        pApplet.popMatrix();
+    }
+
 }

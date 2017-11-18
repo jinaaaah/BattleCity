@@ -1,23 +1,16 @@
 import processing.core.PApplet;
 
 public class Bullet extends RenderObject {
-    private Tank tank;
-    private boolean isDead;
 
-    public Bullet(PApplet pApplet) {
-        super(pApplet);
+    public Bullet(PApplet p, int x, int y, int dir) {
+        super(p);
         addMode(Constants.BULLET, Constants.OBJECT, 21, 21);
         addMode(Constants.EXPLOSION, Constants.OBJECT, 17, 19);
-
         setMode(Constants.BULLET);
-        this.setSpeed(1);
-        isDead = false;
-    }
-    public void setTank(Tank tank){
-        this.tank = tank;
-        this.dir = tank.getDir();
-        this.posX = tank.getPosX();
-        this.posY = tank.getPosY();
+        this.setSpeed(16/3);
+        this.posX = x;
+        this.posY = y;
+        this.dir = dir;
     }
 
     @Override
@@ -33,4 +26,17 @@ public class Bullet extends RenderObject {
         }
     }
 
+    @Override
+    public void render() {
+        pImage = pImages.get(0);
+
+        move();
+    }
+
+    public boolean checkPosition() {
+        if(posX > 800 || posY > 800) {
+            return true;
+        }
+        return false;
+    }
 }
