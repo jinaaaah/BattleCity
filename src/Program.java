@@ -75,31 +75,34 @@ public class Program extends PApplet {
     @Override
     public void keyPressed(KeyEvent event) {
         //key에 따른 유저 업데이트, 가는 상태
-        if(key == UP){
-            user.setDir(Constants.MOVE_UP);
-        }else if(key == DOWN){
-            user.setDir(Constants.MOVE_DOWN);
-        }else if(key == LEFT){
-            user.setDir(Constants.MOVE_LEFT);
-        }else if(key == RIGHT){
-            user.setDir(Constants.MOVE_RIGHT);
-        }else if(key == 'd'){
+        if(key == CODED){
+            if(keyCode == UP){
+                user.setDir(Constants.MOVE_UP);
+                System.out.println("test");
+            }else if(keyCode == DOWN){
+                user.setDir(Constants.MOVE_DOWN);
+            }else if(keyCode == LEFT){
+                user.setDir(Constants.MOVE_LEFT);
+            }else if(keyCode == RIGHT){
+                user.setDir(Constants.MOVE_RIGHT);
+            }else if(key == 'd'){
 
+            }
         }
-        user.setState(true);
+
     }
 
     @Override
     public void keyReleased() {
         //멈춤상태
-        user.setState(false);
+        user.setDir(Constants.STOP);
     }
 
     @Override
     public void settings() {
-        size(500, 500);
+        size(800, 800);
         ResourceManager.init(this);
-        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 20, 30, 8, 4);
+        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 85, 80, 8, 4);
         user = new Tank(this);
 
         tanks = new ArrayList<>();
@@ -110,6 +113,8 @@ public class Program extends PApplet {
     @Override
     public void draw() {
         background(0);
+        user.update();
+        user.render();
     }
 
     @Override

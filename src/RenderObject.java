@@ -10,7 +10,6 @@ public abstract class RenderObject {
     protected HashMap<Integer, ArrayList<PImage>> imageMap;
     protected int posX, posY;
     protected int dir;
-    protected boolean isMoved;
     protected PApplet pApplet;
     protected PImage pImage;
     protected int speed;
@@ -19,7 +18,6 @@ public abstract class RenderObject {
 
     public RenderObject(PApplet pApplet){
         this.pApplet = pApplet;
-        this.isMoved = false;
         imageMap = new HashMap<>();
     }
 
@@ -37,10 +35,6 @@ public abstract class RenderObject {
 
     public void setDir(int dir) {
         this.dir = dir;
-    }
-
-    public void setState(boolean isMoved) {
-        this.isMoved = isMoved;
     }
 
     public void setSpeed(int speed) {

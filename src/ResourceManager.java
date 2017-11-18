@@ -17,7 +17,12 @@ public class ResourceManager {
         ArrayList<PImage> images = new ArrayList<>();
         for(int i = 0 ; i < countY ; i++) {
             for(int j = 0 ; j < countX ; j++) {
-                images.add(p.loadImage(path).get(j * width, i * height, width, height));
+                PImage pImage = p.loadImage(path).get(j * width, i * height, width, height);
+                pImage.resize(40,40);
+//                p.pushMatrix();
+//                p.rotate(PApplet.radians(90.0f));
+//                p.popMatrix();
+                images.add(pImage);
             }
         }
         imageBox.put(name, images);
