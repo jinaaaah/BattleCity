@@ -55,6 +55,9 @@ public abstract class RenderObject {
         this.speed = speed;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
     //그리기 업데이트
     public void update(){
 

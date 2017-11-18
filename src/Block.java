@@ -7,9 +7,5 @@ public class Block extends RenderObject {
 
         setMode(Constants.BLOCK);
     }
-    @Override
-    public boolean checkCollision(int pX, int pY) {
-        return (pX + 20 > this.posX && pX < this.posX + 20
-                && pY + 20 > this.posY && pY < this.posY + 20);
-    }
+
 }
