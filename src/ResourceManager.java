@@ -19,9 +19,6 @@ public class ResourceManager {
             for(int j = 0 ; j < countX ; j++) {
                 PImage pImage = p.loadImage(path).get(j * width, i * height, width, height);
                 pImage.resize(40,40);
-//                p.pushMatrix();
-//                p.rotate(PApplet.radians(90.0f));
-//                p.popMatrix();
                 images.add(pImage);
             }
         }

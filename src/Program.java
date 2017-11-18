@@ -1,9 +1,8 @@
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +12,11 @@ interface OnRecieved {
 }
 
 class ReaderThread extends Thread{
-    private DataInputStream is;
+    private InputStream is;
+    private DataInputStream dis;
     private OnRecieved onRecieved;
 
-    public ReaderThread(DataInputStream is){
+    public ReaderThread(InputStream is){
         this.is = is;
     }
 
@@ -37,21 +37,26 @@ class ReaderThread extends Thread{
 
     @Override
     public void run() {
+        dis = new DataInputStream(is);
         byte[] data = new byte[1024];
         try{
             while (true) {
-                int packetLen = is.readInt();
-                readn(is, data,packetLen);
+                int packetLen = dis.readInt();
+                readn(dis, data,packetLen);
 
                 String message = new String(data, 0, packetLen);
                 if(onRecieved != null){
                     onRecieved.onReceive(message);
                 }
             }
-        }catch (Exception e){
+        }catch (EOFException ignored){
+            System.out.println("연결 종료");
+        }
+        catch (Exception e){
             e.printStackTrace();
         }finally {
             try {
+                dis.close();
                 is.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -62,9 +67,9 @@ class ReaderThread extends Thread{
 
 public class Program extends PApplet {
 
+    private static int[][] mapArray;
     private Socket socket;
     private ReaderThread readerThread;
-    private OutputStream os;
 
     private List<Tank> tanks;
     private List<Block> blocks;
@@ -72,26 +77,39 @@ public class Program extends PApplet {
 
     private Tank user;
 
+    private OnRecieved onRecieved = new OnRecieved() {
+        @Override
+        public void onReceive(String packet) {
+            //System.out.println(packet);
+            String[] messages = packet.split("#");
+
+            if(messages[0].equals("MAP")){
+                initMap(messages[1]);
+            }
+        }
+
+    };
+
     @Override
     public void keyPressed(KeyEvent event) {
         //key에 따른 유저 업데이트, 가는 상태
         if(key == CODED){
-            user.setMoved(true);
             if(keyCode == UP){
                 user.setDir(Constants.MOVE_UP);
+                System.out.println("test");
             }else if(keyCode == DOWN){
                 user.setDir(Constants.MOVE_DOWN);
             }else if(keyCode == LEFT){
                 user.setDir(Constants.MOVE_LEFT);
-                /*user.setPosX(user.getPosY());
-                user.setPosY(user.getPosX());*/
             }else if(keyCode == RIGHT){
                 user.setDir(Constants.MOVE_RIGHT);
-                /*user.setPosX(user.getPosY());
-                user.setPosY(user.getPosX());*/
-            }else if(key == 'd'){
-
             }
+        }
+
+        if(key == ' '){
+            Bullet bullet = new Bullet(this);
+            bullet.setTank(user);
+            bullets.add(bullet);
         }
 
     }
@@ -99,15 +117,8 @@ public class Program extends PApplet {
     @Override
     public void keyReleased() {
         //멈춤상태
-        int posX = user.getPosX();
-        int posY = user.getPosY();
-        /*if(keyCode == LEFT || keyCode == RIGHT) {
-            user.setPosX(posY);
-            user.setPosY(posX);
-        }*/
-        user.setMoved(false);
 
-    //    user.setDir(Constants.STOP);
+        user.setDir(Constants.STOP);
 
     }
 
@@ -118,9 +129,35 @@ public class Program extends PApplet {
         ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 85, 80, 8, 4);
         user = new Tank(this);
 
+        mapArray = new int[20][20];
         tanks = new ArrayList<>();
         bullets = new ArrayList<>();
         blocks = new ArrayList<>();
+
+        try {
+            socket = new Socket();
+            socket.connect(new InetSocketAddress("192.168.11.3",5000));
+
+            OutputStream os = socket.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(os);
+            InputStream is = socket.getInputStream();
+
+            readerThread = new ReaderThread(is);
+            readerThread.setOnReceived(onRecieved);
+            readerThread.start();
+
+
+            String string2 = "MAP";
+            dos.writeInt(string2.length());
+            dos.write(string2.getBytes());
+
+            String string = "SET#JiDah";
+            dos.writeInt(string.length());
+            dos.write(string.getBytes());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -128,6 +165,13 @@ public class Program extends PApplet {
         background(0);
         user.update();
         user.render();
+
+        for(Bullet b : bullets){
+            b.update();
+        }
+        for(Bullet b : bullets){
+            b.render();
+        }
     }
 
     @Override
@@ -136,7 +180,16 @@ public class Program extends PApplet {
     }
 
     //map 정보 받아와 blocks에 넣어준다
-    private void initMap(){
+    private void initMap(String message){
+        String[] row = message.split("/n");
+        for(int i = 0; i < row.length; i++){
+            System.out.println(row[i]);
+            String[] column = row[i].split("");
+            for(int j = 0; j < row[i].length(); j++){
+                System.out.println(column[j]);
+                //mapArray[i][j] = Integer.parseInt(column[j]);
+            }
+        }
 
     }
 
