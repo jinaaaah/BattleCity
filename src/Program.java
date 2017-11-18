@@ -96,6 +96,8 @@ public class Program extends PApplet {
     @Override
     public void settings() {
         size(500, 500);
+        ResourceManager.init(this);
+        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 20, 30, 8, 4);
         user = new Tank(this);
 
         tanks = new ArrayList<>();
@@ -111,10 +113,6 @@ public class Program extends PApplet {
     @Override
     public void setup() {
         background(0);
-        ResourceManager.init(this);
-        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 20, 30, 8, 3);
-        ResourceManager.cropImage(Constants.BLOCK, "./img/tanks_image.png", 20, 30, 8, 3);
-
     }
 
     //map 정보 받아와 blocks에 넣어준다
