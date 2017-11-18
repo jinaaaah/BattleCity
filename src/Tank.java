@@ -18,6 +18,34 @@ public class Tank extends RenderObject {
     }
 
     @Override
+    public boolean checkCollision(int pX, int pY) {
+        int dx = posX;
+        int dy = posY;
+        if (this.dir == Constants.MOVE_LEFT) {
+            dx = posX - speed -1;
+        } else if (this.dir == Constants.MOVE_RIGHT) {
+            dx = posX + speed +1;
+        } else if (this.dir == Constants.MOVE_UP) {
+            dy = posY - speed -1;
+        } else if (this.dir == Constants.MOVE_DOWN) {
+            dy = posY + speed +1;
+        }
+
+//        if(dx + 40 > pX ){
+//            posY -= speed;
+//        }
+
+//        if(pX + 40 > this.posX){
+//            this.posX
+//        }
+//        return (pX + 40 > this.posX && pX < this.posX + 40
+//                && pY + 40 > this.posY && pY < this.posY + 40);
+
+        return (dx + 40 > pX && dx < pX + 40
+                && dy + 40 > pY && dy < pY + 40);
+    }
+
+    @Override
     public void update() {
         if(isMoved) {
             if (this.dir == Constants.MOVE_LEFT) {

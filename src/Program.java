@@ -98,12 +98,16 @@ public class Program extends PApplet {
             user.setMoved(true);
             if(keyCode == UP){
                 user.setDir(Constants.MOVE_UP);
+                checkCollision();
             }else if(keyCode == DOWN){
                 user.setDir(Constants.MOVE_DOWN);
+                checkCollision();
             }else if(keyCode == LEFT){
                 user.setDir(Constants.MOVE_LEFT);
+                checkCollision();
             }else if(keyCode == RIGHT){
                 user.setDir(Constants.MOVE_RIGHT);
+                checkCollision();
             }
         }
         if(key == ' '){
@@ -119,12 +123,25 @@ public class Program extends PApplet {
 
     }
 
+    private void checkCollision(){
+        for(Block b: blocks){
+            if(user.checkCollision(b.getPosX(), b.getPosY())){
+                user.setMoved(false);
+                return;
+            }
+        }
+
+        user.setMoved(true);
+    }
+
     @Override
     public void settings() {
         size(800, 800);
         ResourceManager.init(this);
-        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 85, 80, 8, 4);
+        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 84, 84, 8, 4);
         user = new Tank(this);
+        user.setPosX(400);
+        user.setPosY(400);
 
         mapArray = new int[20][20];
         tanks = new ArrayList<>();
