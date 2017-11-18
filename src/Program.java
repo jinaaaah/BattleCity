@@ -133,18 +133,37 @@ public class Program extends PApplet {
                 createBullet(messages[1],messages[2],messages[3],messages[4]);
             }
             if(messages[0].equals("DESTROY")){
+                System.out.println("destroy");
                 if(messages.length == 2){
-                    
+                    deleteBullet(messages[1]);
                 }
                 else if(messages.length == 3){
-
+                    deleteBullet(messages[1]);
+                    deleteTank(messages[2]);
                 }
-                System.out.println("destroy");
+
             }
         }
 
     };
 
+    private void deleteBullet(String name){
+        for(Bullet b: bullets){
+            if(b.getName().equals(name)){
+                bullets.remove(b);
+                break;
+            }
+        }
+    }
+
+    private void deleteTank(String name){
+        for(Tank tank: tanks){
+            if(tank.getName().equals(name)){
+                tanks.remove(tank);
+                break;
+            }
+        }
+    }
     private boolean setState(String message){
         if(message.equals("0")){
             return false;
