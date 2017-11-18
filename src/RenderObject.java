@@ -100,4 +100,9 @@ public abstract class RenderObject {
         pApplet.popMatrix();
     }
 
+    public boolean checkCollision(int pX, int pY){
+        return false;
+    }
+
+
 }
