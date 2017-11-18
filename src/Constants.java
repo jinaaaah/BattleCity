@@ -1,3 +1,4 @@
 public class Constants {
-    final int TANK = 0;
+    final int A_TEAM = 0;
+    final int B_TEAM = 1;
 }

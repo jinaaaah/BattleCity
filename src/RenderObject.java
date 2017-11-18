@@ -8,17 +8,22 @@ public abstract class RenderObject {
 
     protected int mode;
     protected HashMap<Integer, ArrayList<PImage>> imageMap;
-    protected ResourceManger resourceManger;
+    protected ResourceManger resourceManager;
     protected int posX, posY;
+    protected int dir;
     protected PApplet pApplet;
     protected PImage pImage;
     protected ArrayList<PImage> pImages;
     protected int tick = 0;
 
-    public RenderObject(PApplet pApplet, ResourceManger resourceManger){
+    public RenderObject(PApplet pApplet, ResourceManger resourceManager){
         this.pApplet = pApplet;
-        this.resourceManger = resourceManger;
+        this.resourceManager = resourceManager;
         imageMap = new HashMap<>();
+    }
+
+    public int getDir(){
+        return dir;
     }
 
     public int getPosX() {
@@ -48,11 +53,11 @@ public abstract class RenderObject {
     }
 
     //mode 추가
-    public void addMode(int mode, String resourceId, int[] indices){
+    public void addMode(int mode, int resourceId, int[] indices){
         ArrayList<PImage> curImages = new ArrayList<>();
 
         for(int i = 0; i< indices.length; i++){
-            //curImages[i] = resourceManager.getImage(resourceId,indices[i]);
+            curImages.add(resourceManager.getImage(resourceId,indices[i]));
         }
         imageMap.put(mode,curImages);
     }
