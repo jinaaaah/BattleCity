@@ -95,7 +95,15 @@ public class Program extends PApplet {
     @Override
     public void keyReleased() {
         //멈춤상태
+//        int posX = user.getPosX();
+//        int posY = user.getPosY();
+//        if(keyCode == UP || keyCode == DOWN) {
+//            user.setPosX(posY);
+//            user.setPosY(posX);
+//        }
+
         user.setDir(Constants.STOP);
+
     }
 
     @Override

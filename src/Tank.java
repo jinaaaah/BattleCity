@@ -16,13 +16,13 @@ public class Tank extends RenderObject {
     @Override
     public void update() {
         if (this.dir == Constants.MOVE_LEFT) {
-            posX -= speed;
+            posY -= speed;
         } else if (this.dir == Constants.MOVE_RIGHT) {
-            posX += speed;
+            posY -= speed;
         } else if (this.dir == Constants.MOVE_UP) {
             posY -= speed;
         } else if (this.dir == Constants.MOVE_DOWN) {
-            posY += speed;
+            posY -= speed;
         }
 
     }
@@ -31,22 +31,28 @@ public class Tank extends RenderObject {
     public void render() {
         if(this.dir == Constants.STOP){
             pImage = pImages.get(0);
+            pApplet.translate(20,20);
+            pApplet.image(pImage, posX, posY);
+
         }else{
             tick++;
             pImage = pImages.get((tick/8) % pImages.size());
+            pApplet.imageMode(PConstants.CENTER);
+            pApplet.translate(20,20);
+            pApplet.pushMatrix();
+            if (this.dir == Constants.MOVE_LEFT) {
+                pApplet.rotate(PApplet.radians(270.0f));
+            } else if (this.dir == Constants.MOVE_RIGHT) {
+                pApplet.rotate(PApplet.radians(90.0f));
+            } else if (this.dir == Constants.MOVE_DOWN) {
+                pApplet.rotate(PApplet.radians(180.0f));
+            }
+
+            pApplet.image(pImage, posX, posY);
+            pApplet.popMatrix();
+
         }
 
-        pApplet.pushMatrix();
 
-        if (this.dir == Constants.MOVE_LEFT) {
-            pApplet.rotate(PApplet.radians(270.0f));
-        } else if (this.dir == Constants.MOVE_RIGHT) {
-            pApplet.rotate(PApplet.radians(90.0f));
-        } else if (this.dir == Constants.MOVE_DOWN) {
-            pApplet.rotate(PApplet.radians(180.0f));
-        }
-
-        pApplet.image(pImage, posX, posY);
-        pApplet.popMatrix();
     }
 }
