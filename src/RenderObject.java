@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public abstract class RenderObject {
     public void render(){
         tick++;
         pImage = pImages.get(tick/ 8 % pImages.size());
+        pApplet.imageMode(PConstants.CENTER);
         pApplet.image(pImage,posX,posY);
     }
 
@@ -87,6 +89,7 @@ public abstract class RenderObject {
 
     public void drawImage() {
         pApplet.pushMatrix();
+
         if (this.dir == Constants.MOVE_LEFT) {
             pApplet.rotate(PApplet.radians(270.0f));
             pApplet.image(pImage, -posY, posX);

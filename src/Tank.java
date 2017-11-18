@@ -17,6 +17,10 @@ public class Tank extends RenderObject {
         setMode(Constants.A_TEAM);
     }
 
+    public void setTeam(int team) {
+        this.team = team;
+    }
+
     @Override
     public boolean checkCollision(int pX, int pY) {
         int dx = posX;
@@ -57,7 +61,6 @@ public class Tank extends RenderObject {
             } else if (this.dir == Constants.MOVE_DOWN) {
                 posY += speed;
             }
-            System.out.println(dir + ":" + posX + "," + posY);
         }
         reload();
     }
@@ -68,9 +71,6 @@ public class Tank extends RenderObject {
             tick++;
         }
         pImage = pImages.get((tick/8) % pImages.size());
-        pApplet.imageMode(PConstants.CENTER);
-        pApplet.translate(18,20);
-
         drawImage();
     }
 

@@ -88,6 +88,11 @@ public class Program extends PApplet {
             if(messages[0].equals("MAP")){
                 initMap(messages[1]);
             }
+            if(messages[0].equals("GEN")){
+                user.setTeam(Integer.parseInt(messages[1]));
+                user.setPosX((int)(Double.parseDouble(messages[2])));
+                user.setPosY((int)(Double.parseDouble(messages[3])));
+            }
         }
 
     };
@@ -237,11 +242,11 @@ public class Program extends PApplet {
         Block block;
         for(int i = 0 ; i < 20 ; i ++){
             for( int j = 0 ; j < 20 ; j ++){
-                mapArray[i][j] = Integer.parseInt(String.valueOf(row.charAt(i * 21 + j)));
+                mapArray[i][j] = Integer.parseInt(String.valueOf(row.charAt(j * 21 + i)));
                 if(mapArray[i][j] == 1){
                     block = new Block(this);
-                    block.setPosX(i*40);
-                    block.setPosY(j*40);
+                    block.setPosX(i*40 +20);
+                    block.setPosY(j*40 +20);
                     blocks.add(block);
                 }
             }
