@@ -74,4 +74,8 @@ public class Program extends PApplet {
         ResourceManager.init(this);
         ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 20, 30, 8, 3);
     }
+
+    public static void main(String[] args) {
+        PApplet.main("Program");
+    }
 }
