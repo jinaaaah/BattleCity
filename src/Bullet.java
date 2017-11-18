@@ -33,7 +33,7 @@ public class Bullet extends RenderObject {
     }
 
     public boolean checkPosition() {
-        if(posX > 500 || posY > 500) {
+        if(posX < 35 || posX > 735 || posY < 35 || posY > 735) {
             return true;
         }
         return false;

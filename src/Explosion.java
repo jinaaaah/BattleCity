@@ -27,6 +27,6 @@ public class Explosion extends RenderObject{
     @Override
     public void render() {
         tick++;
-        pApplet.image(pImages.get(tick/8%pImages.size()), posX, posY);
+        pApplet.image(pImages.get(tick / 8 % pImages.size()), posX, posY);
     }
 }
