@@ -82,7 +82,7 @@ public abstract class RenderObject {
         imageMap.put(mode, img);
     }
 
-    public void move() {
+    public void drawImage() {
         pApplet.pushMatrix();
         if (this.dir == Constants.MOVE_LEFT) {
             pApplet.rotate(PApplet.radians(270.0f));

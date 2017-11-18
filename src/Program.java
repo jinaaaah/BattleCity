@@ -74,6 +74,7 @@ public class Program extends PApplet {
     private List<Tank> tanks;
     private List<Block> blocks;
     private List<Bullet> bullets;
+    private List<Explosion> explosions;
 
     private Tank user;
 
@@ -129,6 +130,7 @@ public class Program extends PApplet {
         tanks = new ArrayList<>();
         bullets = new ArrayList<>();
         blocks = new ArrayList<>();
+        explosions = new ArrayList<>();
 
         try {
             socket = new Socket();
@@ -168,15 +170,23 @@ public class Program extends PApplet {
             b.render();
 
             if(b.checkPosition()) {
+                explosions.add(new Explosion(this, b.posX, b.posY));
                 bullets.remove(b);
             }
-        }
-        for(Bullet b : bullets){
-
         }
 
         for(Block b : blocks){
             b.render();
+        }
+
+        for(int i = 0 ; i < explosions.size() ; i++) {
+            Explosion e = explosions.get(i);
+            e.update();
+            e.render();
+
+            if(e.isRemoveOk()) {
+                explosions.remove(e);
+            }
         }
     }
 

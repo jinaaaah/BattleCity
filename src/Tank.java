@@ -31,9 +31,7 @@ public class Tank extends RenderObject {
             }
             System.out.println(dir + ":" + posX + "," + posY);
         }
-
         reload();
-
     }
 
     @Override
@@ -44,7 +42,8 @@ public class Tank extends RenderObject {
         pImage = pImages.get((tick/8) % pImages.size());
         pApplet.imageMode(PConstants.CENTER);
         pApplet.translate(18,20);
-        move();
+
+        drawImage();
     }
 
     public Bullet shoot() {
