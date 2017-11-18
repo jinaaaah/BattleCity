@@ -71,6 +71,7 @@ class ReaderThread extends Thread{
 
 public class Program extends PApplet {
 
+    private static String myId = "JiDah";
     private static int[][] mapArray;
     private Socket socket;
     private ReaderThread readerThread;
@@ -92,7 +93,7 @@ public class Program extends PApplet {
                 initMap(messages[1]);
             }
             if(messages[0].equals("GEN")){
-                if(messages[4].equals("JiDah")){
+                if(messages[4].equals(myId)){
                     user.setName(messages[4]);
                     user.setTeam(Integer.parseInt(messages[1]));
                     user.setPosX((int)(Double.parseDouble(messages[2])));
@@ -110,7 +111,7 @@ public class Program extends PApplet {
             }
             if(messages[0].equals("UPDATE")){
                 if(detectTank(messages[1]) != null){
-                    if(!messages[1].equals("JiDah")) {
+                    if(!messages[1].equals(myId)) {
                         Tank tank = detectTank(messages[1]);
                         tank.setPosX((int) (Double.parseDouble(messages[2])));
                         tank.setPosY((int) (Double.parseDouble(messages[3])));
@@ -138,10 +139,16 @@ public class Program extends PApplet {
                     deleteBullet(messages[1]);
                 }
                 else if(messages.length == 3){
+                    if(messages[2].equals(myId)){
+                        reset();
+                    }
                     deleteBullet(messages[1]);
                     deleteTank(messages[2]);
                 }
 
+            }
+            if(messages[0].equals("OUT")){
+                deleteTank(messages[1]);
             }
         }
 
@@ -290,6 +297,10 @@ public class Program extends PApplet {
         }
 
         user.setMoved(true);
+    }
+
+    private void reset(){
+        settings();
     }
 
     @Override
