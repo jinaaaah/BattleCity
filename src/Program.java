@@ -1,9 +1,12 @@
 import processing.core.PApplet;
 
 public class Program extends PApplet{
+    private ResourceManger resourceManger;
+
     @Override
     public void settings() {
         size(500,500);
+        resourceManger = new ResourceManger();
     }
 
     @Override
