@@ -8,7 +8,6 @@ public abstract class RenderObject {
 
     protected int mode;
     protected HashMap<Integer, ArrayList<PImage>> imageMap;
-    protected ResourceManger resourceManager;
     protected int posX, posY;
     protected int dir;
     protected PApplet pApplet;
@@ -16,9 +15,8 @@ public abstract class RenderObject {
     protected ArrayList<PImage> pImages;
     protected int tick = 0;
 
-    public RenderObject(PApplet pApplet, ResourceManger resourceManager){
+    public RenderObject(PApplet pApplet){
         this.pApplet = pApplet;
-        this.resourceManager = resourceManager;
         imageMap = new HashMap<>();
     }
 
@@ -57,7 +55,7 @@ public abstract class RenderObject {
         ArrayList<PImage> curImages = new ArrayList<>();
 
         for(int i = 0; i< indices.length; i++){
-            curImages.add(resourceManager.getImage(resourceId,indices[i]));
+            curImages.add(ResourceManager.getImage(resourceId,indices[i]));
         }
         imageMap.put(mode,curImages);
     }

@@ -4,7 +4,7 @@ import processing.core.PImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ResourceManger {
+public class ResourceManager {
     private static PApplet p;
     private static HashMap<Integer, ArrayList<PImage>> imageBox;
 

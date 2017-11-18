@@ -55,15 +55,12 @@ class ReaderThread extends Thread{
     }
 }
 
-public class Program extends PApplet{
-    private ResourceManger resourceManger;
-
-
+public class Program extends PApplet {
 
     @Override
     public void settings() {
-        size(500,500);
-        resourceManger = new ResourceManger();
+        size(500, 500);
+
     }
 
     @Override
@@ -74,8 +71,7 @@ public class Program extends PApplet{
     @Override
     public void setup() {
         background(0);
-    }
-    public static void main(String[] args) {
-        PApplet.main("Program");
+        ResourceManager.init(this);
+        ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 20, 30, 8, 3);
     }
 }
