@@ -134,7 +134,6 @@ public class Program extends PApplet {
                 createBullet(messages[1],messages[2],messages[3],messages[4]);
             }
             if(messages[0].equals("DESTROY")){
-                System.out.println("destroy");
                 if(messages.length == 2){
                     deleteBullet(messages[1]);
                 }
