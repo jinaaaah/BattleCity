@@ -26,4 +26,8 @@ public class ResourceManager {
     public static PImage getImage(int name, int index) {
         return imageBox.get(name).get(index);
     }
+
+    public static ArrayList<PImage> getImage(int name) {
+        return imageBox.get(name);
+    }
 }

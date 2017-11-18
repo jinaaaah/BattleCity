@@ -12,6 +12,7 @@ public abstract class RenderObject {
     protected int dir;
     protected PApplet pApplet;
     protected PImage pImage;
+    protected int speed;
     protected ArrayList<PImage> pImages;
     protected int tick = 0;
 
@@ -30,6 +31,10 @@ public abstract class RenderObject {
 
     public int getPosY() {
         return posY;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     //그리기 업데이트
