@@ -38,15 +38,19 @@ class ReaderThread extends Thread{
     @Override
     public void run() {
         dis = new DataInputStream(is);
-        byte[] data = new byte[1024];
+        byte[] data = new byte[8192];
         try{
             while (true) {
-                int packetLen = dis.readInt();
-                readn(dis, data,packetLen);
+                try {
+                    int packetLen = dis.readInt();
+                    readn(dis, data, packetLen);
 
-                String message = new String(data, 0, packetLen);
-                if(onRecieved != null){
-                    onRecieved.onReceive(message);
+                    String message = new String(data, 0, packetLen);
+                    if (onRecieved != null) {
+                        onRecieved.onReceive(message);
+                    }
+                } catch(IOException nowatch){
+
                 }
             }
         }catch (EOFException ignored){
@@ -82,51 +86,163 @@ public class Program extends PApplet {
     private OnRecieved onRecieved = new OnRecieved() {
         @Override
         public void onReceive(String packet) {
-            //System.out.println(packet);
             String[] messages = packet.split("#");
 
             if(messages[0].equals("MAP")){
                 initMap(messages[1]);
             }
             if(messages[0].equals("GEN")){
-                user.setTeam(Integer.parseInt(messages[1]));
-                user.setPosX((int)(Double.parseDouble(messages[2])));
-                user.setPosY((int)(Double.parseDouble(messages[3])));
+                if(messages[4].equals("JiDah")){
+                    user.setName(messages[4]);
+                    user.setTeam(Integer.parseInt(messages[1]));
+                    user.setPosX((int)(Double.parseDouble(messages[2])));
+                    user.setPosY((int)(Double.parseDouble(messages[3])));
+                    tanks.add(user);
+                }else{
+                    Tank tank = createTank();
+                    tank.setName(messages[4]);
+                    tank.setTeam(Integer.parseInt(messages[1]));
+                    tank.setPosX((int)(Double.parseDouble(messages[2])));
+                    tank.setPosY((int)(Double.parseDouble(messages[3])));
+                    tanks.add(tank);
+                }
+
+            }
+            if(messages[0].equals("UPDATE")){
+                if(detectTank(messages[1]) != null){
+                    if(!messages[1].equals("JiDah")) {
+                        Tank tank = detectTank(messages[1]);
+                        tank.setPosX((int) (Double.parseDouble(messages[2])));
+                        tank.setPosY((int) (Double.parseDouble(messages[3])));
+                        tank.setDir(setDirection(messages[4]));
+                        tank.setMoved(setState(messages[5]));
+                    }
+                }else{
+                    Tank tank = createTank();
+                    tank.setName(messages[1]);
+                    tank.setTeam(Integer.parseInt(messages[6]));
+                    tank.setPosX((int)(Double.parseDouble(messages[2])));
+                    tank.setPosY((int)(Double.parseDouble(   messages[3])));
+                    tank.setDir(setDirection(messages[4]));
+                    tank.setMoved(setState(messages[5]));
+                    tanks.add(tank);
+                }
+                System.out.println(messages[1]+":"+messages[4]);
+            }
+            if(messages[0].equals("BULLET")){
+                createBullet(messages[1],messages[2],messages[3],messages[4]);
+            }
+            if(messages[0].equals("DESTROY")){
+                if(messages.length == 2){
+                    
+                }
+                else if(messages.length == 3){
+
+                }
+                System.out.println("destroy");
             }
         }
 
     };
 
+    private boolean setState(String message){
+        if(message.equals("0")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    private int setDirection(String message){
+        int i = 0;
+        if(message.equals("LEFT")){
+            i = Constants.MOVE_LEFT;
+        }
+        if(message.equals("RIGHT")){
+            i = Constants.MOVE_RIGHT;
+        }
+        if(message.equals("UP")){
+            i = Constants.MOVE_UP;
+        }
+        if(message.equals("DOWN")){
+            i = Constants.MOVE_DOWN;
+        }
+        return i;
+    }
+
+    private Tank createTank(){
+        Tank tank = new Tank(this);
+        return tank;
+    }
+
+    private void createBullet(String name,String x, String y, String dir){
+        int direction = setDirection(dir);
+
+        boolean bulletExist = false;
+
+        for(Bullet b: bullets){
+            if(b.getName().equals(name)){
+                b.setDir(direction);
+                b.posX = (int)(Double.parseDouble(x));
+                b.posY = (int)(Double.parseDouble(y));
+
+                bulletExist = true;
+            }
+        }
+
+        if(!bulletExist) {
+            bullets.add(new Bullet(this, name, (int) (Double.parseDouble(x)),
+                    (int) (Double.parseDouble(y)), direction));
+        }
+
+    }
+
+    private Tank detectTank(String name){
+        Tank tank = null;
+        for(Tank t : tanks){
+            if(t.getName().equals(name)){
+                tank = t;
+            }
+        }
+        return tank;
+    }
+
     @Override
     public void keyPressed(KeyEvent event) {
 
+        String string = null;
         try {
-            String string = "MOVE#" + user.getDir() + "#" + user.getPosX() + "#" + user.getPosY();
+
+            String direction= null;
+            //key에 따른 유저 업데이트, 가는 상태
+            if(key == CODED){
+                user.setMoved(true);
+                if(keyCode == UP){
+                    user.setDir(Constants.MOVE_UP);
+                    direction = "UP";
+                    checkCollision();
+                }else if(keyCode == DOWN){
+                    user.setDir(Constants.MOVE_DOWN);
+                    direction = "DOWN";
+                    checkCollision();
+                }else if(keyCode == LEFT){
+                    user.setDir(Constants.MOVE_LEFT);
+                    direction = "LEFT";
+                    checkCollision();
+                }else if(keyCode == RIGHT){
+                    user.setDir(Constants.MOVE_RIGHT);
+                    direction = "RIGHT";
+                    checkCollision();
+                }
+                string = "MOVE#" + direction + "#" + user.getPosX() + "#" + user.getPosY();
+            }
+            if(key == ' '){
+                string = "BULLET";
+            }
+
             dos.writeInt(string.length());
             dos.write(string.getBytes());
         }catch(Exception e) {
             e.printStackTrace();
-        }
-
-        //key에 따른 유저 업데이트, 가는 상태
-        if(key == CODED){
-            user.setMoved(true);
-            if(keyCode == UP){
-                user.setDir(Constants.MOVE_UP);
-                checkCollision();
-            }else if(keyCode == DOWN){
-                user.setDir(Constants.MOVE_DOWN);
-                checkCollision();
-            }else if(keyCode == LEFT){
-                user.setDir(Constants.MOVE_LEFT);
-                checkCollision();
-            }else if(keyCode == RIGHT){
-                user.setDir(Constants.MOVE_RIGHT);
-                checkCollision();
-            }
-        }
-        if(key == ' '){
-            bullets.add(user.shoot());
         }
 
     }
@@ -163,8 +279,6 @@ public class Program extends PApplet {
         ResourceManager.init(this);
         ResourceManager.cropImage(Constants.OBJECT, "./img/tanks_image.png", 84, 84, 8, 4);
         user = new Tank(this);
-        user.setPosX(400);
-        user.setPosY(400);
 
         mapArray = new int[20][20];
         tanks = new ArrayList<>();
@@ -202,18 +316,25 @@ public class Program extends PApplet {
     @Override
     public void draw() {
         background(0);
-        user.update();
-        user.render();
 
-        for(int i = 0 ; i < bullets.size() ; i++) {
-            Bullet b = bullets.get(i);
-            b.update();
-            b.render();
+        List<Tank> drawTanks = new ArrayList<>();
+        drawTanks.addAll(tanks);
 
-            if(b.checkPosition()) {
-                explosions.add(new Explosion(this, b.posX, b.posY));
-                bullets.remove(b);
-            }
+        List<Bullet> drawBullets = new ArrayList<>();
+        drawBullets.addAll(bullets);
+
+        for(Tank tank : drawTanks){
+            tank.update();
+        }
+        for(Tank tank: drawTanks){
+            tank.render();
+        }
+
+        for(Bullet bullet : drawBullets){
+            bullet.update();
+        }
+        for(Bullet bullet: drawBullets){
+            bullet.render();
         }
 
         for(Block b : blocks){

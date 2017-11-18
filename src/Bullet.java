@@ -2,14 +2,21 @@ import processing.core.PApplet;
 
 public class Bullet extends RenderObject {
 
-    public Bullet(PApplet p, int x, int y, int dir) {
+    private String name;
+    public Bullet(PApplet p,String name, int x, int y, int dir) {
         super(p);
         addMode(Constants.BULLET, Constants.OBJECT, 21, 21);
         setMode(Constants.BULLET);
+
+        this.name = name;
         this.setSpeed(16/3);
         this.posX = x;
         this.posY = y;
         this.dir = dir;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

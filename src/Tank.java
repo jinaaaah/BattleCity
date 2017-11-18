@@ -1,9 +1,8 @@
 import processing.core.PApplet;
-import processing.core.PConstants;
 
 public class Tank extends RenderObject {
     protected int team;
-    protected Bullet bullet;
+    protected String name;
     protected boolean isDead;
 
     public Tank(PApplet pApplet) {
@@ -14,10 +13,16 @@ public class Tank extends RenderObject {
         addMode(Constants.A_TEAM, Constants.OBJECT, 1, 8);
         addMode(Constants.B_TEAM, Constants.OBJECT, 9, 16);
 
-        setMode(Constants.A_TEAM);
     }
 
+    public String getName(){
+        return name;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
     public void setTeam(int team) {
+        setMode(team);
         this.team = team;
     }
 
@@ -35,15 +40,7 @@ public class Tank extends RenderObject {
             dy = posY + speed +1;
         }
 
-//        if(dx + 40 > pX ){
-//            posY -= speed;
-//        }
 
-//        if(pX + 40 > this.posX){
-//            this.posX
-//        }
-//        return (pX + 40 > this.posX && pX < this.posX + 40
-//                && pY + 40 > this.posY && pY < this.posY + 40);
 
         return (dx + 40 > pX && dx < pX + 40
                 && dy + 40 > pY && dy < pY + 40);
@@ -62,7 +59,6 @@ public class Tank extends RenderObject {
                 posY += speed;
             }
         }
-        reload();
     }
 
     @Override
@@ -74,16 +70,4 @@ public class Tank extends RenderObject {
         drawImage();
     }
 
-    public Bullet shoot() {
-        if(bullet == null) {
-            bullet = new Bullet(pApplet, posX, posY, dir);
-        }
-        return bullet;
-    }
-
-    public void reload() {
-        if(bullet != null && bullet.checkPosition()) {
-            bullet = null;
-        }
-    }
 }
