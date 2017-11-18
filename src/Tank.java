@@ -5,7 +5,8 @@ public class Tank extends RenderObject {
     public Tank(PApplet pApplet) {
         super(pApplet);
         this.setSpeed(1);
-        addMode(Constants.MOVE_LEFT, Constants.OBJECT, new int[]{1,2,3,4,5,6,7,8});
+        addMode(Constants.A_TEAM, Constants.OBJECT, 1, 8);
+        addMode(Constants.B_TEAM, Constants.OBJECT, 9, 16);
     }
 
     @Override

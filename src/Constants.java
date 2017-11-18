@@ -4,9 +4,10 @@ public class Constants {
     static final int OBJECT = 2;
     static final int BLOCK = 3;
     static final int BULLET = 4;
-    static final int MOVE_LEFT = 3;
-    static final int MOVE_RIGHT = 4;
-    static final int MOVE_UP = 5;
-    static final int MOVE_DOWN = 6;
+    static final int EXPLOSION = 5;
+    static final int MOVE_LEFT = 6;
+    static final int MOVE_RIGHT = 7;
+    static final int MOVE_UP = 8;
+    static final int MOVE_DOWN = 9;
 
 }

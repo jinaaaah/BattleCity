@@ -56,14 +56,12 @@ public abstract class RenderObject {
     }
 
     //mode 추가
-    public void addMode(int mode, int resourceId, int[] indices){
-        ArrayList<PImage> curImages = new ArrayList<>();
-
-        for(int i = 0; i< indices.length; i++){
-            curImages.add(ResourceManager.getImage(resourceId,indices[i]));
+    public void addMode(int mode, int name, int start, int end) {
+        ArrayList<PImage> img = new ArrayList<>();
+        for(int i = start ; i <= end ; i++) {
+            img.add(ResourceManager.getImage(name, i));
         }
-        imageMap.put(mode,curImages);
+        imageMap.put(mode, img);
     }
-
 
 }
